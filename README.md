@@ -10,14 +10,14 @@ Proyek ini dibuat dengan ❤️ untuk memenuhi tugas praktikum **Pengembangan Pe
 ---
 ## 📌 Fitur Utama
 
-### Untuk Masyarakat (User)
+## Untuk Masyarakat (User)
 - Registrasi dan Login
 - Melihat daftar voucher hewan kurban
 - Filter berdasarkan lokasi, jenis hewan, harga
 - Klaim voucher kurban dengan mengisi form
 - Menerima informasi lokasi dan jadwal kurban
 
-### Untuk Panitia / Admin
+## Untuk Panitia / Admin
 - Login admin
 - Tambah dan edit data voucher hewan kurban
 - Kelola slot, harga, waktu, dan lokasi penyembelihan
@@ -31,7 +31,7 @@ Proyek ini dibuat dengan ❤️ untuk memenuhi tugas praktikum **Pengembangan Pe
 - **Desain UI/UX**: Figma
 Link : https://www.figma.com/design/wMaQR5FLJFYuBJrmPtAZ4B/berbagiqurban?node-id=1-2&t=UPsR4SMuAHobUEs8-1
 ```bash 
-Frontend (HTML, Tailwind, JS)
+Frontend (HTML, css, JS)
 ↓
 Backend API (Django)
 ↓
@@ -41,12 +41,12 @@ Database (SQLite / PostgreSQL)
 ---
 ## 🚀 Instalasi & Setup
 
-### 1. Clone Repository
+## 1. Clone Repository
 ```bash
 git clone https://github.com/namamu/berbagiqurban.git](https://github.com/iwanikhairina/Kelompok6-PPL-UAS
 cd berbagiqurban
 ```
-###2. Install Dependency Python
+##2. Install Dependency Python
 ```bash
 python -m venv env
 source env/bin/activate  # Linux/Mac
@@ -54,21 +54,21 @@ env\Scripts\activate     # Windows
 
 pip install -r requirements.txt
 ```
-###3. Migrasi Database
+##3. Migrasi Database
 ```bash
 python manage.py migrate
 ```
-###4. Jalankan Server
+##4. Jalankan Server
 ```bash
 python manage.py runserver
 ```
 
-###🔐 Role Pengguna
+##🔐 Role Pengguna
 Role	Deskripsi
 User	Masyarakat yang ingin klaim kurban
 Admin	Panitia Kurban/Masjid yang mengelola voucher
 
-###🧪 Pengujian
+##🧪 Pengujian
 1. Manual Testing: Semua fitur diuji dengan interaksi langsung.
 2. User Testing: Feedback dari calon pengguna komunitas.
 3. Hasil: Sistem berjalan baik pada klaim, login, dan manajemen voucher.
