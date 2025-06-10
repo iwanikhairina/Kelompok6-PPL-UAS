@@ -1,0 +1,303 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Hapus Voucher{% endblock %}
+{% block page_title %}Konfirmasi Hapus Voucher{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-warning {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    }
+    
+    .voucher-info {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .voucher-header {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e9ecef;
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .voucher-body {
+        padding: 20px;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #6c757d;
+        min-width: 120px;
+    }
+    
+    .info-value {
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .btn-danger-custom {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+        padding: 12px 30px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-danger-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    }
+    
+    .btn-secondary-custom {
+        background: #6c757d;
+        border: none;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary-custom:hover {
+        transform: translateY(-2px);
+        background: #5a6268;
+    }
+    
+    .warning-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        opacity: 0.9;
+    }
+    
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'admin:dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'admin:voucher_list' %}">Voucher</a></li>
+                <li class="breadcrumb-item active">Hapus Voucher</li>
+            </ol>
+        </nav>
+
+        <!-- Warning Alert -->
+        <div class="delete-warning text-center">
+            <i class="fas fa-exclamation-triangle warning-icon"></i>
+            <h4 class="mb-3">Peringatan!</h4>
+            <p class="mb-0">
+                Anda akan menghapus voucher ini secara permanen. 
+                <strong>Tindakan ini tidak dapat dibatalkan!</strong>
+            </p>
+        </div>
+
+        <!-- Voucher Information -->
+        <div class="voucher-info mb-4">
+            <div class="voucher-header">
+                <i class="fas fa-ticket-alt me-2"></i>
+                Detail Voucher yang akan Dihapus
+            </div>
+            
+            <div class="voucher-body">
+                <div class="info-row">
+                    <span class="info-label">Judul:</span>
+                    <span class="info-value">{{ voucher.title }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Kategori:</span>
+                    <span class="info-value">{{ voucher.category.name }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Harga:</span>
+                    <span class="info-value text-success fw-bold">
+                        {% if voucher.price == 0 %}
+                            Gratis
+                        {% else %}
+                            Rp {{ voucher.price|floatformat:0 }}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Lokasi:</span>
+                    <span class="info-value">{{ voucher.location }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Tanggal & Waktu:</span>
+                    <span class="info-value">
+                        {{ voucher.date|date:"d F Y" }} - {{ voucher.time|time:"H:i" }} WIB
+                    </span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Total Slot:</span>
+                    <span class="info-value">{{ voucher.total_slots }} slot</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Slot Tersedia:</span>
+                    <span class="info-value">{{ voucher.available_slots }} slot</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value">
+                        {% if voucher.is_active %}
+                            <span class="status-badge status-active">
+                                <i class="fas fa-check-circle me-1"></i>Aktif
+                            </span>
+                        {% else %}
+                            <span class="status-badge status-inactive">
+                                <i class="fas fa-times-circle me-1"></i>Tidak Aktif
+                            </span>
+                        {% endif %}
+                    </span>
+                </div>
+                
+                {% if voucher.description %}
+                <div class="info-row">
+                    <span class="info-label">Deskripsi:</span>
+                    <span class="info-value">{{ voucher.description|truncatechars:100 }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="info-row">
+                    <span class="info-label">Dibuat:</span>
+                    <span class="info-value">{{ voucher.created_at|date:"d F Y, H:i" }} WIB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact Warning -->
+        {% if voucher.total_slots != voucher.available_slots %}
+        <div class="alert alert-warning" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Perhatian:</strong> Voucher ini telah memiliki 
+            <strong>{{ voucher.total_slots|add:voucher.available_slots|add:"-"|add:voucher.total_slots }} peserta</strong> 
+            yang sudah mengklaim. Menghapus voucher akan mempengaruhi data peserta tersebut.
+        </div>
+        {% endif %}
+
+        <!-- Confirmation Form -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-4">
+                    <i class="fas fa-question-circle me-2 text-danger"></i>
+                    Apakah Anda yakin ingin menghapus voucher ini?
+                </h5>
+                
+                <form method="post" class="d-flex justify-content-center gap-3">
+                    {% csrf_token %}
+                    
+                    <button type="submit" class="btn btn-danger btn-danger-custom">
+                        <i class="fas fa-trash-alt me-2"></i>
+                        Ya, Hapus Voucher
+                    </button>
+                    
+                    <a href="{% url 'admin:voucher_list' %}" class="btn btn-secondary btn-secondary-custom">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Batal
+                    </a>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        <i class="fas fa-lock me-1"></i>
+                        Data yang sudah dihapus tidak dapat dikembalikan
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add confirmation dialog for extra safety
+    const deleteForm = document.querySelector('form');
+    const deleteButton = document.querySelector('.btn-danger-custom');
+    
+    if (deleteForm && deleteButton) {
+        deleteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show custom confirmation dialog
+            const confirmDelete = confirm(
+                'KONFIRMASI TERAKHIR!\n\n' +
+                'Voucher "{{ voucher.title|escapejs }}" akan dihapus permanen.\n' +
+                'Tindakan ini TIDAK DAPAT DIBATALKAN!\n\n' +
+                'Ketik "HAPUS" untuk melanjutkan atau "Batal" untuk membatalkan.'
+            );
+            
+            if (confirmDelete) {
+                const userConfirm = prompt(
+                    'Ketik "HAPUS" (tanpa tanda kutip) untuk mengkonfirmasi penghapusan:'
+                );
+                
+                if (userConfirm === 'HAPUS') {
+                    // Show loading state
+                    deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menghapus...';
+                    deleteButton.disabled = true;
+                    
+                    // Submit the form
+                    this.submit();
+                } else {
+                    alert('Konfirmasi tidak sesuai. Penghapusan dibatalkan.');
+                }
+            }
+        });
+    }
+    
+    // Auto focus on cancel button for safer default action
+    const cancelButton = document.querySelector('.btn-secondary-custom');
+    if (cancelButton) {
+        cancelButton.focus();
+    }
+});
+</script>
+{% endblock %}

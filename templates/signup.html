@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Daftar - BerbagiQurban{% endblock %}
+
+{% block content %}
+<style>
+    .bg-signup {
+        background: url('{% static "login.png" %}') center/cover no-repeat;
+        height: 100vh;
+        width: 100%;
+    }
+
+    .left-overlay {
+        background-color: rgba(255, 255, 255, 0.5);
+        height: 100%;
+    }
+
+    .logo-container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-green {
+        background-color: #A6C09E;
+        color: white;
+        border: none;
+    }
+
+    .btn-green:hover {
+        background-color: #94ad8d;
+    }
+
+    .signup-card {
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 2rem;
+        background-color: white;
+    }
+
+    .signup-container {
+        min-height: 100vh;
+        display: flex;
+    }
+
+    .password-mismatch {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+</style>
+
+<div class="bg-signup d-flex flex-row signup-container">
+    <div class="col-md-6 left-overlay d-flex justify-content-center align-items-center">
+        <img src="{% static 'splash1.png' %}" alt="Logo" class="img-fluid" style="max-width: 300px;">
+    </div>
+
+    <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div class="signup-card" style="width: 100%; max-width: 400px;">
+            <h4 class="text-center fw-bold mb-4">SIGN UP</h4>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" id="signupForm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input type="text" class="form-control" name="username" required
+                           value="{{ form.username.value|default:'' }}"
+                           style="background-color: #f5f5f5; border: none;">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" class="form-control" name="email" required
+                           value="{{ form.email.value|default:'' }}"
+                           style="background-color: #f5f5f5; border: none;">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" required
+                           style="background-color: #f5f5f5; border: none;">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Konfirmasi Password</label>
+                    <input type="password" class="form-control" name="confirm_password" id="confirmPassword" required
+                           style="background-color: #f5f5f5; border: none;">
+                    <div id="passwordMismatch" class="password-mismatch" style="display: none;">
+                        Password tidak cocok
+                    </div>
+                </div>
+
+                <div class="text-center mb-3">
+                    <small>
+                        <span class="text-muted">sudah punya akun? </span>
+                        <a href="{% url 'login' %}" class="text-decoration-none" style="color: #A6C09E;">login</a>
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-green w-100 btn-lg" id="submitBtn">DAFTAR</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordMismatch = document.getElementById('passwordMismatch');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('signupForm');
+
+    function checkPasswordMatch() {
+        if (confirmPassword.value === '') {
+            passwordMismatch.style.display = 'none';
+            return true;
+        }
+        
+        if (password.value !== confirmPassword.value) {
+            passwordMismatch.style.display = 'block';
+            return false;
+        } else {
+            passwordMismatch.style.display = 'none';
+            return true;
+        }
+    }
+
+    confirmPassword.addEventListener('input', checkPasswordMatch);
+    password.addEventListener('input', checkPasswordMatch);
+
+    form.addEventListener('submit', function(e) {
+        if (!checkPasswordMatch()) {
+            e.preventDefault();
+            alert('Password dan konfirmasi password tidak cocok!');
+        }
+    });
+});
+</script>
+
+{% endblock %}

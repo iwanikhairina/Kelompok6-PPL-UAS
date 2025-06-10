@@ -1,0 +1,331 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px 10px 0 0;
+        margin: 0;
+    }
+    .section-body {
+        padding: 20px;
+    }
+    .required-field {
+        color: #dc3545;
+    }
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    .btn-save {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 12px 30px;
+        font-weight: 600;
+    }
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'admin:dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'admin:voucher_list' %}">Voucher</a></li>
+                <li class="breadcrumb-item active">{{ title }}</li>
+            </ol>
+        </nav>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h5 class="section-header">
+                    <i class="fas fa-info-circle me-2"></i>Informasi Dasar
+                </h5>
+                <div class="section-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="{{ form.title.id_for_label }}" class="form-label">
+                                    {{ form.title.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.title }}
+                                {% if form.title.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.title.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.category.id_for_label }}" class="form-label">
+                                    {{ form.category.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.category }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.category.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.description.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price and Slots Section -->
+            <div class="form-section">
+                <h5 class="section-header">
+                    <i class="fas fa-money-bill-wave me-2"></i>Harga & Slot
+                </h5>
+                <div class="section-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.price.id_for_label }}" class="form-label">
+                                    {{ form.price.label }} <span class="required-field">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    {{ form.price }}
+                                </div>
+                                {% if form.price.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.price.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.total_slots.id_for_label }}" class="form-label">
+                                    {{ form.total_slots.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.total_slots }}
+                                {% if form.total_slots.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.total_slots.errors.0 }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    Jumlah total slot yang tersedia untuk voucher ini
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Section -->
+            <div class="form-section">
+                <h5 class="section-header">
+                    <i class="fas fa-map-marker-alt me-2"></i>Lokasi & Tempat
+                </h5>
+                <div class="section-body">
+                    <div class="mb-3">
+                        <label for="{{ form.location.id_for_label }}" class="form-label">
+                            {{ form.location.label }} <span class="required-field">*</span>
+                        </label>
+                        {{ form.location }}
+                        {% if form.location.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.location.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.address.id_for_label }}" class="form-label">
+                            {{ form.address.label }}
+                        </label>
+                        {{ form.address }}
+                        {% if form.address.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.address.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div class="form-section">
+                <h5 class="section-header">
+                    <i class="fas fa-calendar-alt me-2"></i>Jadwal
+                </h5>
+                <div class="section-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.date.id_for_label }}" class="form-label">
+                                    {{ form.date.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.date }}
+                                {% if form.date.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.date.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.time.id_for_label }}" class="form-label">
+                                    {{ form.time.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.time }}
+                                {% if form.time.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.time.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Section -->
+            <div class="form-section">
+                <h5 class="section-header">
+                    <i class="fas fa-toggle-on me-2"></i>Status
+                </h5>
+                <div class="section-body">
+                    <div class="form-check form-switch">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                            {{ form.is_active.label }}
+                        </label>
+                        <div class="form-text">
+                            Voucher yang aktif akan ditampilkan di halaman utama
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-section">
+                <div class="section-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button type="submit" class="btn btn-success btn-save me-2">
+                                <i class="fas fa-save me-2"></i>
+                                {% if voucher %}Update Voucher{% else %}Simpan Voucher{% endif %}
+                            </button>
+                            <a href="{% url 'admin:voucher_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Batal
+                            </a>
+                        </div>
+                        {% if voucher %}
+                        <div>
+                            <a href="{% url 'admin:voucher_delete' voucher.pk %}" 
+                               class="btn btn-danger"
+                               onclick="return confirm('Apakah Anda yakin ingin menghapus voucher ini?')">
+                                <i class="fas fa-trash me-2"></i>Hapus Voucher
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Preview Card (for existing voucher) -->
+{% if voucher %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="form-section">
+            <h5 class="section-header">
+                <i class="fas fa-eye me-2"></i>Preview Voucher
+            </h5>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="fw-bold">{{ voucher.title }}</h6>
+                        <p class="text-muted mb-2">{{ voucher.description|truncatechars:200 }}</p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <small class="text-muted">Lokasi:</small><br>
+                                <strong>{{ voucher.location }}</strong>
+                            </div>
+                            <div class="col-sm-6">
+                                <small class="text-muted">Jadwal:</small><br>
+                                <strong>{{ voucher.date|date:"d F Y" }} - {{ voucher.time|time:"H:i" }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="badge bg-primary mb-2">{{ voucher.category.name }}</div><br>
+                        <h4 class="text-success mb-2">Rp {{ voucher.price|floatformat:0 }}</h4>
+                        <small class="text-muted">{{ voucher.available_slots }}/{{ voucher.total_slots }} slot tersisa</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-format price input
+    const priceInput = document.getElementById('{{ form.price.id_for_label }}');
+    if (priceInput) {
+        priceInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            if (value) {
+                e.target.value = parseInt(value).toLocaleString('id-ID');
+            }
+        });
+        
+        // Remove formatting before form submission
+        priceInput.form.addEventListener('submit', function() {
+            priceInput.value = priceInput.value.replace(/[^\d]/g, '');
+        });
+    }
+    
+    // Set minimum date to today
+    const dateInput = document.getElementById('{{ form.date.id_for_label }}');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    }
+});
+</script>
+{% endblock %}

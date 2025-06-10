@@ -1,0 +1,209 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+{% block page_title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-ticket-alt fa-2x mb-3"></i>
+                <h4 class="card-title">{{ total_vouchers }}</h4>
+                <p class="card-text">Total Voucher</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card-success h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-check-circle fa-2x mb-3"></i>
+                <h4 class="card-title">{{ active_vouchers }}</h4>
+                <p class="card-text">Voucher Aktif</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card-warning h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-tags fa-2x mb-3"></i>
+                <h4 class="card-title">{{ total_categories }}</h4>
+                <p class="card-text">Kategori Hewan</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card-info h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-2x mb-3"></i>
+                <h4 class="card-title">{{ available_slots }}</h4>
+                <p class="card-text">Slot Tersedia</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Aksi Cepat</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <a href="{% url 'admin:voucher_create' %}" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-plus me-2"></i>Tambah Voucher Baru
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="{% url 'admin:category_create' %}" class="btn btn-info btn-lg w-100">
+                            <i class="fas fa-tags me-2"></i>Tambah Kategori Baru
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Vouchers -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Voucher Terbaru</h5>
+                <a href="{% url 'admin:voucher_list' %}" class="btn btn-light btn-sm">
+                    <i class="fas fa-list me-1"></i>Lihat Semua
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_vouchers %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Judul</th>
+                                    <th>Kategori</th>
+                                    <th>Harga</th>
+                                    <th>Lokasi</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for voucher in recent_vouchers %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ voucher.title }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ voucher.category.name }}</span>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success">Rp {{ voucher.price|floatformat:0 }}</strong>
+                                    </td>
+                                    <td>{{ voucher.location|truncatechars:30 }}</td>
+                                    <td>{{ voucher.date|date:"d M Y" }}</td>
+                                    <td>
+                                        {% if voucher.is_active %}
+                                            <span class="badge bg-success">Aktif</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Tidak Aktif</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'admin:voucher_edit' voucher.pk %}" 
+                                               class="btn btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'admin:voucher_delete' voucher.pk %}" 
+                                               class="btn btn-outline-danger" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Belum ada voucher yang dibuat.</p>
+                        <a href="{% url 'admin:voucher_create' %}" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>Buat Voucher Pertama
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Stats -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Statistik Slot</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-primary">{{ total_slots }}</h4>
+                        <small class="text-muted">Total Slot</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">{{ available_slots }}</h4>
+                        <small class="text-muted">Slot Tersedia</small>
+                    </div>
+                </div>
+                <div class="progress mt-3">
+                    {% if total_slots > 0 %}
+                        {% widthratio available_slots total_slots 100 as percentage %}
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ percentage }}%" 
+                             aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ percentage }}% Tersedia
+                        </div>
+                    {% else %}
+                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 100%">
+                            Tidak ada data
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informasi Sistem</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-calendar text-primary me-2"></i>
+                        <strong>Hari ini:</strong> {{ "now"|date:"d F Y" }}
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-user text-success me-2"></i>
+                        <strong>Login sebagai:</strong> {{ user.username }}
+                    </li>
+                    <li class="mb-0">
+                        <i class="fas fa-clock text-info me-2"></i>
+                        <strong>Waktu:</strong> {{ "now"|date:"H:i" }} WIB
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

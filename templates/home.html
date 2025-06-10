@@ -1,0 +1,540 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BerbagiQurban - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background-color: #6b7280;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Hero Section */
+        .hero-section {
+background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{% static "home.png" %}') center/cover no-repeat;            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 20px;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-section h2 {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            margin-left: 100px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            margin-left: 100px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .popup-cow {
+            position: absolute;
+            bottom: 35px; /* Position at the bottom of the hero section */
+            left: 0;   /* Position at the left of the hero section */
+            width: 200px; /* Adjust size as needed */
+            height: auto;
+            z-index: 1; /* Ensure it's behind text but above background */
+            /* Optional: Add a slight transform for a 'peeking' effect */
+            transform: translateY(10%); /* Adjust to make it peek from bottom */
+        }
+
+        /* Animal silhouettes */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 150px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150"><ellipse cx="80" cy="120" rx="60" ry="20" fill="rgba(255,255,255,0.2)"/><ellipse cx="140" cy="100" rx="25" ry="35" fill="rgba(255,255,255,0.2)"/><ellipse cx="60" cy="80" rx="40" ry="30" fill="rgba(255,255,255,0.15)"/></svg>') no-repeat;
+            background-size: contain;
+        }
+
+        /* Search and Filter Section */
+        .search-section {
+            background: white;
+            padding: 30px 20px;
+            margin: -30px 20px 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            min-width: 150px;
+            cursor: pointer;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            min-width: 300px;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        /* Voucher Cards Section */
+        .vouchers-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .vouchers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .voucher-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .voucher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .animal-tag {
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .card-price {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .info-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .claim-button {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .claim-button:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .claim-button.claimed {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .claim-button.claimed:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .no-vouchers {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .no-vouchers h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Messages */
+        .messages {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .alert {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+                text-align: center;
+            }
+
+            .hero-section {
+                padding: 60px 20px;
+                min-height: 300px;
+            }
+
+            .hero-section h2 {
+                font-size: 32px;
+            }
+
+            .hero-section::before {
+                display: none;
+            }
+
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+
+            .vouchers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>BERBAGIQURBAN</h1>
+        <div class="user-info">
+            <span>Selamat datang, {{ user.username }}!</span>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="{% static 'popup.png' %}" alt="Cow Head Popup" class="popup-cow">
+        <div class="hero-content">
+            <h2>ASSALAMUALAIKUM<br>SAHABAT SURGA!</h2>
+            <p>Dapatkan voucher kurban gratis</p>
+            <p>untuk mu dan keluarga mu</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <form method="GET" class="search-container">
+            <div class="filter-group">
+                <label for="jenis">Jenis:</label>
+                <select name="jenis" id="jenis" class="filter-select">
+                    <option value="">Semua Jenis</option>
+                    {% for value, label in animal_choices %}
+                    <option value="{{ value }}" {% if current_filter == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="text" name="search" class="search-input" placeholder="Cari voucher berdasarkan judul, lokasi, atau masjid..." value="{{ current_search|default:'' }}">
+            <button type="submit" class="search-btn">Cari</button>
+        </form>
+    </section>
+
+    <!-- Vouchers Section -->
+    <section class="vouchers-section">
+        <h2 class="section-title">Voucher Tersedia</h2>
+        
+        {% if vouchers %}
+        <div class="vouchers-grid">
+            {% for voucher in vouchers %}
+            <div class="voucher-card">
+                <div class="card-header">
+                    <span class="animal-tag">{{ voucher.get_animal_type_display }}</span>
+                    <div class="card-title">{{ voucher.title }}</div>
+                    <div class="card-price">GRATIS</div>
+                </div>
+                <div class="card-body">
+                    <div class="info-item">
+                        <svg class="info-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        {{ voucher.location }}
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        {{ voucher.schedule_date|date:"d M Y" }} - {{ voucher.schedule_time|time:"H:i" }}
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        {{ voucher.mosque }}
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">{{ voucher.status_text }}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ voucher.progress_percentage }}%;"></div>
+                        </div>
+                    </div>
+                    
+                    {% if voucher.id in claimed_voucher_ids %}
+                        <div class="claim-button claimed">Sudah Diklaim</div>
+                    {% elif not voucher.is_available %}
+                        <div class="claim-button claimed">Voucher Habis</div>
+                    {% else %}
+                        <a href="{% url 'voucher_detail' voucher.id %}" class="claim-button">Lihat Detail</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-vouchers">
+            <h3>Tidak ada voucher tersedia</h3>
+            <p>Maaf, saat ini tidak ada voucher yang sesuai dengan pencarian Anda.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <script>
+        // Auto submit form when filter changes
+        document.getElementById('jenis').addEventListener('change', function() {
+            this.form.submit();
+        });
+
+        // Page load animation
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.voucher-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

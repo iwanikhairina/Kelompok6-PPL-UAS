@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Masuk - BerbagiQurban{% endblock %}
+
+{% block content %}
+<style>
+    .bg-login {
+        background: url('{% static "login.png" %}') center/cover no-repeat;
+        height: 100vh;
+        width: 100%;
+    }
+
+    .left-overlay {
+        background-color: rgba(255, 255, 255, 0.5);
+        height: 100%;
+    }
+
+    .logo-container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-green {
+        background-color: #A6C09E;
+        color: white;
+        border: none;
+    }
+
+    .btn-green:hover {
+        background-color: #94ad8d;
+    }
+
+    .login-card {
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 2rem;
+        background-color: white;
+    }
+
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+    }
+</style>
+
+<div class="bg-login d-flex flex-row login-container">
+    <!-- Left Half -->
+    <div class="col-md-6 left-overlay d-flex justify-content-center align-items-center">
+        <img src="{% static 'splash1.png' %}" alt="Logo" class="img-fluid" style="max-width: 300px;">
+    </div>
+
+    <!-- Right Half -->
+    <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div class="login-card" style="width: 100%; max-width: 400px;">
+            <h4 class="text-center fw-bold mb-4">LOGIN</h4>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input type="text" class="form-control" name="username" required
+                           style="background-color: #f5f5f5; border: none;">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Password</label>
+                    <input type="password" class="form-control" name="password" required
+                           style="background-color: #f5f5f5; border: none;">
+                </div>
+
+                <div class="text-center mb-3">
+                    <small>
+                        <span class="text-muted">belum punya akun? </span>
+                        <a href="{% url 'signup' %}" class="text-decoration-none" style="color: #A6C09E;">sign up</a>
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-green w-100 btn-lg">MASUK</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
